@@ -3,6 +3,10 @@ import 'package:get/get.dart';
 import 'home_screen.dart';
 import 'auth_controller.dart';
 
+//use the credentials for login
+//"email": "eve.holt@reqres.in",
+//  "password": "cityslicka"
+
 class Login extends StatelessWidget {
   const Login({super.key});
 
@@ -86,15 +90,37 @@ class Login extends StatelessWidget {
                       : ElevatedButton(
                           onPressed: () async {
                             if (_formkey.currentState!.validate()) {
+                              controller.isloading.value = true;
                               final email = emailController.text.trim();
                               final password = passwordController.text.trim();
-                              controller.isloading.value = true;
-
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomeScreen()));
+                              final success =
+                                  await controller.login(email, password);
                               controller.isloading.value = false;
+
+                              if (success) {
+                                Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                        transitionDuration:
+                                            Duration(milliseconds: 800),
+                                        pageBuilder: (_, __, ___) =>
+                                            HomeScreen(),
+                                        transitionsBuilder:
+                                            (_, animation, __, child) {
+                                          const begin = Offset(1, 0);
+                                          const end = Offset.zero;
+                                          const curve = Curves.bounceInOut;
+                                          var inBetween = Tween(
+                                                  begin: begin, end: end)
+                                              .chain(CurveTween(curve: curve));
+                                          var transition =
+                                              animation.drive(inBetween);
+                                          return SlideTransition(
+                                            position: transition,
+                                            child: child,
+                                          );
+                                        }));
+                              }
                             }
                           },
                           child: Text("login"));

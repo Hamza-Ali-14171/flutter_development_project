@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:week_1_project/auth_controller.dart';
 import 'package:week_1_project/home_controller.dart';
+import 'package:week_1_project/login.dart';
+import 'package:week_1_project/profile.dart';
+import 'package:week_1_project/to_do_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -9,6 +13,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(HomeController());
     TextEditingController searchController = TextEditingController();
+    final authController = Get.find<AuthController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -52,7 +57,37 @@ class HomeScreen extends StatelessWidget {
                 }
               },
             );
-          })
+          }),
+          IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () {
+                authController.logoutState();
+                Get.offAll(Login());
+              }),
+          IconButton(
+              onPressed: () {
+                Navigator.push((context),
+                    MaterialPageRoute(builder: (context) => ProfileScreen()));
+              },
+              icon: Icon(Icons.person_2_rounded)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    (context),
+                    PageRouteBuilder(
+                      transitionDuration: Duration(milliseconds: 800),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          ToDoList(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ));
+              },
+              icon: Icon(Icons.task))
         ],
       ),
       body: Obx(() {
