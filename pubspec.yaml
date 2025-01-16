@@ -41,6 +41,8 @@ dependencies:
   get: ^4.6.6
   shared_preferences: ^2.3.5
   sqflite: ^2.4.1
+  file_picker: ^8.1.7
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:

@@ -26,7 +26,7 @@ class AuthController extends GetxController {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString("token", token);
         isAuthenticated.value = true;
-        isloading.value = false;
+        isloading.value = true;
         return true;
       } else {
         isloading.value = false;

@@ -11,6 +11,7 @@ class ToDoList extends StatefulWidget {
 
 class _ToDoListState extends State<ToDoList> {
   TextEditingController title = TextEditingController();
+  TextEditingController newtitle = TextEditingController();
   List<Map<String, dynamic>> _data = [];
   @override
   void initState() {
@@ -32,7 +33,7 @@ class _ToDoListState extends State<ToDoList> {
   }
 
   Future<void> _updateData(int id, bool isCompleted) async {
-    await SqlHelper.updateData(id, !isCompleted);
+    await SqlHelper.updateData(id, !isCompleted, newtitle.text);
     _loadData();
   }
 
@@ -97,6 +98,42 @@ class _ToDoListState extends State<ToDoList> {
                         icon: Icon(Icons.delete),
                         onPressed: () => _deleteTask(task['id']),
                       ),
+                      IconButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      title: Text("update the title"),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          TextField(
+                                            controller: newtitle,
+                                            decoration: InputDecoration(
+                                                hintText: "enter tilte",
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8))),
+                                          ),
+                                          TextButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  _updateData(
+                                                      _data[index]["id"],
+                                                      _data[index]
+                                                              ["isCompleted"] ==
+                                                          0);
+                                                  Navigator.pop(context);
+                                                });
+                                              },
+                                              child: Text("done"))
+                                        ],
+                                      ),
+                                    ));
+                          },
+                          icon: Icon(Icons.edit))
                     ],
                   ),
                 );

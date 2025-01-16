@@ -28,9 +28,13 @@ class SqlHelper {
     return read;
   }
 
-  static Future<int> updateData(int id, bool isCompleted) async {
+  static Future<int> updateData(
+      int id, bool isCompleted, String newTitle) async {
     final subhan = await SqlHelper.db();
-    Map<String, dynamic> store2 = {"isCompleted": isCompleted ? 1 : 0};
+    Map<String, dynamic> store2 = {
+      "isCompleted": isCompleted ? 1 : 0,
+      "title": newTitle
+    };
     final update =
         await subhan.update("ali", store2, where: "id=?", whereArgs: [id]);
     return update;
